@@ -6,9 +6,12 @@ import './index.less'
 
 export default class Header extends Component {
     componentWillMount(){
+
         this.setState({
             username:"测试账号"
         });
+
+        //时间设置
         setInterval(()=>{
             let sysTime = Unti.formateData(new Date().getTime());
             this.setState({
@@ -17,15 +20,15 @@ export default class Header extends Component {
         });
         this.getWeatherAPIDate();
     }
+
+    //天气api获取
     getWeatherAPIDate(){
         let city = encodeURIComponent('常州');
         axios.jsonp({
             url:"http://api.map.baidu.com/telematics/v3/weather?location="+city+"&output=json&ak=3p49MVra6urFRGOT9s8UBWr2"
         }).then((res)=>{
-            console.log(res);
             if(res.status === 'success'){
                 let data = res.results[0].weather_data[0];
-                console.log(data);
                 this.setState({
                     dayPictureUrl:data.dayPictureUrl,
                     weather:data.weather + ' ' + data.temperature + ' ' + data.wind
@@ -33,6 +36,7 @@ export default class Header extends Component {
             }
         })
     }
+
     render(){
         return(
             <div className="header">
