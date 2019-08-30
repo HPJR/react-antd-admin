@@ -14,6 +14,8 @@ import Gallery from './pages/ui/gallery';
 import Carousels from './pages/ui/carousel';
 import FromLogin from './pages/form/login';
 import Register from './pages/form/register';
+import BasicTable from './pages/table/basicTable';
+import highTable from './pages/table/highTable';
 
 export default class IRouter extends Component{
     render(){
@@ -38,6 +40,8 @@ export default class IRouter extends Component{
                                         <Route path="/ui/carousel" component={Carousels}/>
                                         <Route path="/form/login" component={FromLogin}/>
                                         <Route path="/form/reg" component={Register}/>
+                                        <Route path="/table/basic" component={BasicTable}/>
+                                        <Route path="/table/high" component={highTable}/>
                                         {/*<Redirect to="/home"/>*/}
                                         <Route component={NoMatch}/>
                                     </Switch>
