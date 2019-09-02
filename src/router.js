@@ -2,6 +2,7 @@ import React,{ Component } from 'react';
 import {HashRouter,Route,Switch,Redirect} from 'react-router-dom';
 import App from './App';
 import Admin from './admin';
+import Common from './common';
 import Home from './pages/Home'
 import NoMatch from './pages/nomatch';
 import Buttons from './pages/ui/buttons';
@@ -16,6 +17,9 @@ import FromLogin from './pages/form/login';
 import Register from './pages/form/register';
 import BasicTable from './pages/table/basicTable';
 import highTable from './pages/table/highTable';
+import City from './pages/city';
+import cityOrders from './pages/order/index';
+import Detail from './pages/order/detail';
 
 export default class IRouter extends Component{
     render(){
@@ -24,6 +28,11 @@ export default class IRouter extends Component{
                 <HashRouter>
                     <Switch>
                         <Route path='/login' component={ Home }></Route>
+                        <Route path="/common" render={() =>
+                            <Common>
+                                <Route path="/common/order/detail/:orderId" component={ Detail } />
+                            </Common>
+                        }/>
                         <Route
                             path="/"
                             render={() => (
@@ -42,6 +51,8 @@ export default class IRouter extends Component{
                                         <Route path="/form/reg" component={Register}/>
                                         <Route path="/table/basic" component={BasicTable}/>
                                         <Route path="/table/high" component={highTable}/>
+                                        <Route path="/city" component={City}/>
+                                        <Route path="/order" component={ cityOrders }/>
                                         {/*<Redirect to="/home"/>*/}
                                         <Route component={NoMatch}/>
                                     </Switch>

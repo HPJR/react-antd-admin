@@ -38,26 +38,38 @@ export default class Header extends Component {
     }
 
     render(){
+        const { menuType } = this.props;
         return(
-            <div className="header">
+            <div className={menuType ? "header header-detail" : "header" }>
                 <Row className="header-top">
-                    <Col span={24}>
+                    {
+                        menuType ?
+                            <Col span={6} className="logo">
+                                <img src="/assets/antLogo.svg" alt="通用管理系统" />
+                                <span>ANT 通用管理系统</span>
+                            </Col> : ''
+                    }
+                    <Col span={menuType ? 18 : 24}>
                         <span>欢迎，{ this.state.username }</span>
                         <a href="#">退出</a>
                     </Col>
                 </Row>
-                <Row className="breadcrumb">
-                    <Col span={4} className="breadcrumb-title">
-                        首页
-                    </Col>
-                    <Col span={20} className="weather">
-                        <span className="data">{ this.state.sysTime }</span>
-                        <span className="weather-detail">
+                {/*判断*/}
+                {
+                    menuType? '':
+                        <Row className="breadcrumb">
+                            <Col span={4} className="breadcrumb-title">
+                                首页
+                            </Col>
+                            <Col span={20} className="weather">
+                                <span className="data">{ this.state.sysTime }</span>
+                                <span className="weather-detail">
                             <img src={ this.state.dayPictureUrl } alt={  this.state.weather }/>
                             <span>{ this.state.weather }</span>
                         </span>
-                    </Col>
-                </Row>
+                            </Col>
+                        </Row>
+                }
             </div>
         )
     }
