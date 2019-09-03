@@ -2,7 +2,8 @@ import React,{ Component } from 'react';
 import { Row, Col } from 'antd';
 import Unti from '../../untils/untils';
 import axios from '../../axios';
-import './index.less'
+import './index.less';
+import { Link } from 'react-router-dom';
 
 export default class Header extends Component {
     componentWillMount(){
@@ -45,8 +46,10 @@ export default class Header extends Component {
                     {
                         menuType ?
                             <Col span={6} className="logo">
-                                <img src="/assets/antLogo.svg" alt="通用管理系统" />
-                                <span>ANT 通用管理系统</span>
+                                <Link to='/home'>
+                                    <img src="/assets/antLogo.svg" alt="通用管理系统" />
+                                    <span>ANT 通用管理系统</span>
+                                </Link>
                             </Col> : ''
                     }
                     <Col span={menuType ? 18 : 24}>

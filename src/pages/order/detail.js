@@ -32,18 +32,24 @@ export default class Detail extends Component{
                 this.setState({
                     orderInfo:res.list
                 });
-                this.renderMap();
+                this.renderMap(res.list);
             }
         })
     };
 
     //初始化地图
-    renderMap = () => {
+    renderMap = (result) => {
+        let areaArr = result.position_list;
+        let first = areaArr[0];
+
         this.map = new window.BMap.Map("orderDetailMap");    // 创建Map实例
-        this.map.centerAndZoom(new window.BMap.Point(116.404, 39.915), 11);  // 初始化地图
+        this.map.centerAndZoom(new window.BMap.Point(first.lon, first.lat), 11);  // 初始化地图
 
         //添加地图类型控件
         this.addMapControl();
+        this.drawBikeRoute(result);
+        this.drawServiceArea(result);
+        console.log(result);
     };
 
     //添加地图类型控件
@@ -59,6 +65,67 @@ export default class Detail extends Component{
             enableGeolocation: true
         });
         map.addControl(navigationControl);
+    };
+
+    //添加覆盖物绘制用户路线
+    drawBikeRoute = (result) => {
+        let map = this.map;
+        let areaArr = result.position_list;
+
+        if(areaArr.length>0){
+            //起点
+            let first = areaArr[0],
+                pt = new window.BMap.Point(first.lon, first.lat),
+                myIcon = new window.BMap.Icon("/assets/start_point.png", new window.BMap.Size(36,42),{
+                    imageSize: new window.BMap.Size(36,42),
+                    anchor: new window.BMap.Size(36,42)
+                });
+            var marker2 = new window.BMap.Marker(pt,{icon:myIcon});  // 创建标注
+            map.addOverlay(marker2);  // 将标注添加到地图中
+
+            //终点
+            let last = areaArr[areaArr.length-1],
+                pt2 = new window.BMap.Point(last.lon, last.lat),
+                myIcon2 = new window.BMap.Icon("/assets/end_point.png", new window.BMap.Size(36,42),{
+                    imageSize: new window.BMap.Size(36,42),
+                    anchor: new window.BMap.Size(36,42)
+                });
+            let marker3 = new window.BMap.Marker(pt2,{icon:myIcon2});  // 创建标注
+            map.addOverlay(marker3);  // 将标注添加到地图中
+
+            //连接路线图
+            let trackPoint = [];
+            for(let i=0; i<areaArr.length; i++){
+                let point = areaArr[i];
+                trackPoint.push(new window.BMap.Point(point.lon, point.lat))
+            }
+
+            let polyline = new window.BMap.Polyline(trackPoint, {
+                strokeColor: '#1869AD',
+                strokeWeight: 3,
+                strokeOpacity: 1
+            });
+            map.addOverlay(polyline);
+        }
+    };
+
+    //绘制服务区
+    drawServiceArea = (positionList) => {
+        let areaArr = positionList.area;
+        let trackPoint = [];
+        for(let i=0; i<areaArr.length; i++){
+            let point = areaArr[i];
+            trackPoint.push(new window.BMap.Point(point.lon, point.lat))
+        }
+
+        let polygon = new window.BMap.Polygon(trackPoint, {
+            strokeColor: '#CE0000',
+            strokeWeight: 4,
+            strokeOpacity: 1,
+            fillColor: '#ff8605',
+            fillOpacity: 0.4
+        });
+        this.map.addOverlay(polygon);
     };
 
     render(){

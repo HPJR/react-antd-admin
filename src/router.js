@@ -20,6 +20,8 @@ import highTable from './pages/table/highTable';
 import City from './pages/city';
 import cityOrders from './pages/order/index';
 import Detail from './pages/order/detail';
+import Users from './pages/user';
+import BikeMap from './pages/map';
 
 export default class IRouter extends Component{
     render(){
@@ -53,6 +55,8 @@ export default class IRouter extends Component{
                                         <Route path="/table/high" component={highTable}/>
                                         <Route path="/city" component={City}/>
                                         <Route path="/order" component={ cityOrders }/>
+                                        <Route path="/user" component={ Users }/>
+                                        <Route path="/bikeMap" component={ BikeMap }/>
                                         {/*<Redirect to="/home"/>*/}
                                         <Route component={NoMatch}/>
                                     </Switch>

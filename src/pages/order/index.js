@@ -2,6 +2,7 @@ import React , { Component } from 'react';
 import { Card, Form, Table , Button,Select,DatePicker,Modal,message} from 'antd';
 import axios from '../../axios';
 import Utils from "../../untils/untils"
+import BaseForm from '../../component/BaseForm';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -16,7 +17,41 @@ export default class cityOrders extends Component{
             orderList:[],
             orderInfo:{},
             pagination:{}
-        }
+        };
+        //表单定义
+        this.formList = [
+            {
+                type: 'SELECT',
+                label: '城市',
+                field: 'city_id',
+                placeholder: '全部',
+                initialValue: '1',
+                width: 80,
+                list: [
+                    {id: '0', name: '全部'},
+                    {id: '1', name: '北京'},
+                    {id: '2', name: '天津'},
+                    {id: '3', name: '上海'}
+                ]
+            },
+            {
+                type: '时间查询'
+            },
+            {
+                type: 'SELECT',
+                label: '订单状态',
+                field: 'order_status',
+                placeholder: '全部',
+                initialValue: '1',
+                width: 80,
+                list: [
+                    {id: '0', name: '全部'},
+                    {id: '1', name: '进行中'},
+                    {id: '2', name: '结束行程'}
+                ]
+            },
+
+        ]
     };
 
     params = {
@@ -109,9 +144,25 @@ export default class cityOrders extends Component{
 
     //订单详情
     openOrderDetail = () => {
-        let id = this.state.selectedItem.id;
-        window.open(`#/common/order/detail/${id}`);
+        if(this.state.selectedItem){
+            let id = this.state.selectedItem.id;
+            window.open(`#/common/order/detail/${id}`);
+
+        }
+        else {
+            Modal.info({
+                title: '信息',
+                content: '请选择一条订单查看详情'
+            });
+        }
     };
+
+    //表单自定义事件
+    handleFilter = (params) => {
+        this.params = params;
+        this.getOrdersList();
+    };
+
 
     render(){
         const columns = [
@@ -184,7 +235,7 @@ export default class cityOrders extends Component{
         return(
             <div>
                 <Card>
-                    <FilterForm />
+                    <BaseForm formList={ this.formList } filterSubmit={ this.handleFilter }/>
                 </Card>
 
                 {/*订单列表渲染*/}
@@ -239,56 +290,3 @@ export default class cityOrders extends Component{
     }
 }
 
-
-
-//查询表单
-class FilterForm extends Component {
-    render(){
-        const { getFieldDecorator } = this.props.form;
-        return(
-            <Form layout='inline'>
-                <FormItem label="城市">
-                    {
-                        getFieldDecorator('city_id')(
-                            <Select
-                                style={{width:100}}
-                                placeholder="全部"
-                            >
-                                <Option value="">全部</Option>
-                                <Option value="1">北京市</Option>
-                                <Option value="2">天津市</Option>
-                                <Option value="3">深圳市</Option>
-                            </Select>
-                        )
-                    }
-                </FormItem>
-                <FormItem label="时间查询">
-                    {
-                        getFieldDecorator('time')(
-                            <RangePicker />
-                        )
-                    }
-                </FormItem>
-                <FormItem label="订单状态">
-                    {
-                        getFieldDecorator('status')(
-                            <Select
-                                style={{ width: 80 }}
-                                placeholder="全部"
-                            >
-                                <Option value="">全部</Option>
-                                <Option value="1">进行中</Option>
-                                <Option value="2">结束行程</Option>
-                            </Select>
-                        )
-                    }
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" style={{margin:'0 20px'}}>查询</Button>
-                    <Button>重置</Button>
-                </FormItem>
-            </Form>
-        )
-    }
-}
-FilterForm = Form.create({})(FilterForm);

@@ -1,6 +1,7 @@
 import JsonP from 'jsonp';
 import axios from 'axios';
 import { Modal } from 'antd';
+import Utils from '../untils/untils'
 
 export default class Axios {
         //jsonp 获取天气
@@ -29,6 +30,13 @@ export default class Axios {
             }
 
             let baseApi = "https://easy-mock.com/mock/5d687968cf15ca6fdd476db6/reactadmin";
+            //  let baseApi = '';
+            //  if(options.isMock){
+            //      baseApi = 'https://www.easy-mock.com/mock/5c2c7c1b580d6209d1e2aa88/mockapi'
+            //  }else{
+            //      baseApi = 'https://www.easy-mock.com'//改为真实的服务端接口地址
+            //  }
+
             return new Promise((resolve,reject)=>{
                 axios({
                     url:option.url,
