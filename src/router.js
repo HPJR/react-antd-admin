@@ -22,6 +22,12 @@ import cityOrders from './pages/order/index';
 import Detail from './pages/order/detail';
 import Users from './pages/user';
 import BikeMap from './pages/map';
+import Bar from './pages/echarts/bar';
+import Pie from './pages/echarts/pie';
+import Line from './pages/echarts/line';
+import Radar from './pages/echarts/rader';
+import RichText from './pages/rich';
+import Permission from './pages/permission';
 
 export default class IRouter extends Component{
     render(){
@@ -57,7 +63,13 @@ export default class IRouter extends Component{
                                         <Route path="/order" component={ cityOrders }/>
                                         <Route path="/user" component={ Users }/>
                                         <Route path="/bikeMap" component={ BikeMap }/>
-                                        {/*<Redirect to="/home"/>*/}
+                                        <Route path="/charts/bar" component={ Bar }/>
+                                        <Route path="/charts/pie" component={ Pie }/>
+                                        <Route path="/charts/line" component={ Line }/>
+                                        <Route path="/charts/radar" component={ Radar }/>
+                                        <Route path="/rich" component={ RichText }/>
+                                        <Route path="/permission" component={ Permission }/>
+                                        <Redirect to="/home"/>
                                         <Route component={NoMatch}/>
                                     </Switch>
                                 </Admin>

@@ -115,6 +115,10 @@ const menuList = [
                 title:'折线图',
                 key:'/charts/line'
             },
+            {
+                title:'雷达图',
+                key:'/charts/radar'
+            },
         ]
     },
     {
