@@ -4,5 +4,14 @@ import ReactDOM from 'react-dom';
 // import Home from './pages/router_demo/route1/Home';
 import Router from './router';
 // import App from './App';
+import { Provider } from 'react-redux'
+import configureStore from './redux/store/configureStore'
 
-ReactDOM.render(<Router />, document.getElementById('root'));
+const store = configureStore();
+ReactDOM.render(
+    <Provider store={store}>
+        <Router />
+    </Provider>,
+    document.getElementById('root'));
+
+

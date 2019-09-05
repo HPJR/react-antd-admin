@@ -128,32 +128,73 @@ export default class Permission extends Component {
 
     //用户授权弹窗
     handleAuthorized = () => {
-        this.setState({
-            authorizedModal:true
-        })
+        let item = this.state.selectedItem;
+        if(!item){
+            message.error('请选择一个员工');
+            return;
+        }else {
+            this.getAuthorized();
+            this.setState({
+                authorizedModal:true,
+                detailInfo:item
+            })
+        }
     };
 
     //获取角色分配值
     getAuthorized = () => {
-        let _this = this;
+        const mockData = [];   //完整数据
+        const targetKeys = []; //目标用户
         axios.ajax({
-            url:"/role/user_list",
-            data:{
-                param:{
-                    page:this.params.page
-                }
-            }
+            url:"/role/user_list"
         }).then((res)=>{
-            console.log(res);
             if(res.code === 0){
+                let list = res.list;
+                list.forEach((item)=>{
+                    item.key = item.user_id;
+                    if(item.status === 1){
+                        targetKeys.push(item.key)
+                    }
+                    mockData.push(item);
+                });
                 this.setState({
-
+                    mockData,
+                    targetKeys
                 });
             }
         })
     };
 
+    //设置目标用户
+    patchUserInfo = (targetKeys) => {
+        this.setState({
+            targetKeys: targetKeys
+        });
+    };
+
+
     //提交
+    authorizedOk = () => {
+        let data = {};
+        data.user_ids = this.state.targetKeys || [];
+        data.role_id = this.state.selectedItem.id;
+        axios.ajax({
+            url:'/user/add',
+            data:{
+                params:{
+                    ...data
+                }
+            }
+        }).then((res)=>{
+            if(res.code === 0){
+                this.setState({
+                    authorizedModal:false
+                });
+                this.getAuthorized();
+            }
+        })
+    };
+
 
     render(){
 
@@ -264,7 +305,14 @@ export default class Permission extends Component {
                         })
                     }}
                     onOk={this.authorizedOk}
-                    width={600}>
+                    width={800}>
+                    <AuthorizedForm
+                        detailInfo={this.state.detailInfo}
+                        targetKeys = {this.state.targetKeys}
+                        mockData={this.state.mockData}
+                        patchUserInfo={this.patchUserInfo}
+                        wrappedComponentRef={(inst) => this.AuthorizedForm = inst }/>
+                    />
                 </Modal>
 
             </div>
@@ -380,3 +428,51 @@ class SetForm extends Component {
     }
 }
 SetForm = Form.create({})(SetForm);
+
+//穿梭框表单
+class AuthorizedForm extends Component {
+
+    handleChange = (targetKeys) => {
+        this.props.patchUserInfo(targetKeys);
+    };
+
+    filterOption = (inputValue, option) => option.description.indexOf(inputValue) > -1;
+
+
+    render(){
+
+        const mockData = this.props.mockData;
+        const targetKeys = this.props.targetKeys;
+
+        const formItemLayout = {
+            labelCol: {span: 5},
+            wrapperCol: {span: 18}
+        };
+        const detail_info = this.props.detailInfo || {};
+
+        return(
+            <div>
+                <Form layout="horizontal">
+                    <FormItem label="角色名称：" {...formItemLayout}>
+                        <Input disabled maxLength={8} placeholder={detail_info.role_name}/>
+                    </FormItem>
+                    <FormItem label="选择用户：" {...formItemLayout}>
+                        <Transfer
+                            dataSource={mockData}
+                            showSearch
+                            filterOption={this.filterOption}
+                            titles={['待选用户', '已选用户']}
+                            listStyle={{
+                                width: 200,
+                                height: 300,
+                            }}
+                            targetKeys={targetKeys}
+                            onChange={this.handleChange}
+                            render={item => `${item.user_name}`}
+                        />
+                    </FormItem>
+                </Form>
+            </div>
+        )
+    }
+}

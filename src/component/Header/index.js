@@ -4,8 +4,9 @@ import Unti from '../../untils/untils';
 import axios from '../../axios';
 import './index.less';
 import { Link } from 'react-router-dom';
+import {connect} from 'react-redux'  //连接器
 
-export default class Header extends Component {
+class Header extends Component {
     componentWillMount(){
 
         this.setState({
@@ -39,7 +40,7 @@ export default class Header extends Component {
     }
 
     render(){
-        const { menuType } = this.props;
+        const { menuName,menuType } = this.props;
         return(
             <div className={menuType ? "header header-detail" : "header" }>
                 <Row className="header-top">
@@ -62,7 +63,7 @@ export default class Header extends Component {
                     menuType? '':
                         <Row className="breadcrumb">
                             <Col span={4} className="breadcrumb-title">
-                                首页
+                                {menuName || '首页'}
                             </Col>
                             <Col span={20} className="weather">
                                 <span className="data">{ this.state.sysTime }</span>
@@ -77,3 +78,13 @@ export default class Header extends Component {
         )
     }
 }
+
+
+//将state.menuName 绑定到 props 的menuName
+const mapStateToProps = state => {
+    console.log(state);
+    return {
+        menuName: state.menuName
+    }
+};
+export default connect(mapStateToProps)(Header)

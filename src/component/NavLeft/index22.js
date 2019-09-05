@@ -27,12 +27,14 @@ class NavLeft extends Component {
     }
 
     //导航增加背景/触发action事件
-    handleClick = ({item, key}) => {
+    handleClick = (item, key) => {
+        console.log(item);
+        console.log(key);
         const { dispatch } = this.props;
         //触发事件传值
-        dispatch(switchMenu(item.props.title));
+        // dispatch(switchMenu(item.props.title));
         this.setState({
-            currentKey: key
+            currentKey: item.key
         })
     };
 
