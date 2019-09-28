@@ -52,7 +52,7 @@ export default class RichText extends Component {
                     <Button type="primary" onClick={ this.handleEmptyText }>清空内容</Button>
                     <Button type="primary" onClick={ this.handleGetText }>获取内容</Button>
                 </Card>
-                <Card title="富文本编辑器" className="card-wrap">
+                <Card title="11富文本编辑器" className="card-wrap">
                     <Editor
                         editorState={editorState}
                         toolbarClassName="toolbarClassName"
