@@ -10,5 +10,4 @@ react + antd + create-react-app + react-route + axios + ES6/7 + Mock + ECharts +
 npm start  
 ```
  
-## 效果演示
-<a href="http://test1.jianfly.com" target="_blank">http://test.fwxstar.com/</a>
+
